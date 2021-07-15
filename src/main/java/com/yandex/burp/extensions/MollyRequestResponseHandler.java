@@ -5,11 +5,11 @@ import burp.*;
 import burp.IBurpExtenderCallbacks;
 import burp.IHttpRequestResponse;
 
-import com.yandex.burp.extensions.auth.IMollyAuthAdapter;
 import com.yandex.burp.extensions.config.BurpMollyScannerConfig;
 import com.yandex.burp.extensions.modifiers.QsParameterModifier;
 import com.yandex.burp.extensions.modifiers.UserAgentModifier;
 
+import java.io.PrintWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
@@ -23,10 +23,10 @@ public class MollyRequestResponseHandler implements IHttpListener {
     private final EntryPointDeduplicator deduper;
     private final List<IScanQueueItem> scanners;
     private final List<IHttpRequestResponse> postponedEntryPoints;
-    private IMollyAuthAdapter authenticator;
 
-    public MollyRequestResponseHandler(IBurpExtenderCallbacks callbacks, BurpMollyScannerConfig extConfig,
-                                       IMollyAuthAdapter authenticator, List<IScanQueueItem> scanners,
+    public MollyRequestResponseHandler(IBurpExtenderCallbacks callbacks,
+                                        BurpMollyScannerConfig extConfig,
+                                       List<IScanQueueItem> scanners,
                                        EntryPointDeduplicator deduper,
                                        List<IHttpRequestResponse> postponedEntryPoints) {
         this.callbacks = callbacks;
@@ -34,19 +34,10 @@ public class MollyRequestResponseHandler implements IHttpListener {
         this.extConfig = extConfig;
         this.scanners = scanners;
         this.deduper = deduper;
-        this.authenticator = authenticator;
         this.postponedEntryPoints = postponedEntryPoints;
     }
 
     private boolean isStaticFile(String fileName) {
-        List<String> skipFiles = Arrays.asList("/favicon.ico", "/robots.txt");
-
-        for (String fn : skipFiles) {
-            if (fileName.equals(fn)) {
-                return true;
-            }
-        }
-
         for (String ext : extConfig.getStaticFileExt()) {
             if (fileName.endsWith("." + ext)) {
                 return true;
@@ -76,35 +67,6 @@ public class MollyRequestResponseHandler implements IHttpListener {
                 qsm.processHttpMessage(toolFlag, true, messageInfo);
             }
 
-            /* No custom authentication configured */
-            if (authenticator == null) {
-                return;
-            }
-
-            if (authenticator.isAuthExpected()) {
-                if (authenticator.isLogoutRequest(messageInfo)) {
-                    messageInfo.setRequest("".getBytes());
-                }
-
-                if (authenticator.isAuthenticated(messageInfo)) {
-                    return;
-                }
-
-                if (!authenticator.doAuth(messageInfo)) {
-                    try {
-                        OutputStream stderr = callbacks.getStderr();
-                        stderr.write(messageInfo.getRequest());
-                        stderr.write("\n".getBytes());
-                        stderr.write(helpers.stringToBytes("Authentication required"));
-                        stderr.write("\n".getBytes());
-                    } catch (IOException ex) {
-                        /**/
-                    }
-                        /* ignore auth failures for now
-                        callbacks.exitSuite(false);
-                        */
-                }
-            }
             return;
         }
 
@@ -112,11 +74,6 @@ public class MollyRequestResponseHandler implements IHttpListener {
         if (isStaticFile(requestInfo.getUrl().getPath())) {
             return;
         }
-
-        /* From now we process request-response only */
-//        PrintWriter stdout = new PrintWriter(callbacks.getStdout(), true);
-//        stdout.println(helpers.bytesToString(messageInfo.getRequest()));
-//        stdout.println(helpers.bytesToString(messageInfo.getResponse()));
 
         callbacks.doPassiveScan(
                 extConfig.getInitialURL().getHost(),
@@ -159,6 +116,7 @@ public class MollyRequestResponseHandler implements IHttpListener {
             /* we scan URLs with parameters first */
             synchronized (postponedEntryPoints) {
 //                stdout.println("Postponing to Active Scanner: " + requestInfo.getUrl().toString());
+                System.out.println("Postponing to Active Scanner: " + requestInfo.getUrl().toString());
                 postponedEntryPoints.add(messageInfo);
             }
             return;

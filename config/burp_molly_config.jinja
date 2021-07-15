@@ -1,0 +1,26 @@
+{
+  "burp-molly-pack": {
+    "activePluginsEnable": [],
+    "passivePluginsEnable": [],
+    "ClickJackingPlugin": {
+      "ignoreCodes": [
+      ]
+    },
+    "ContentSniffingPlugin": {
+      "ignoreCodes": []
+    }
+  },
+  "burp-molly-scanner": {
+    "report_path": "{{ report_path }}",
+    "initial_url": "{{ initial_url }}",
+    "scan_timeout": {{ scan_timeout }},
+    "max_issue_samples": 100,
+    "user_agent": "fake user-agent",
+    "ignore_issues": [],
+    "static_file_extensions": ["js", "png", "gif", "css", "jpg", "jpeg", "ico", "docx", "doc", "exe", "pdf", "xls", "ico", "pkg", "zip"],
+    "crossdomain_js_whitelist": [],
+    "public_cors_whitelist": [],
+    "proxy_domain_blacklist": [],
+    "crossdomain_xml_whitelist": []
+  }
+}

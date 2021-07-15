@@ -29,12 +29,6 @@
                 "include":[],
                 "scope_option":"suite"
             },
-            "platform_authentication":{
-                "credentials":[],
-                "do_platform_authentication":true,
-                "prompt_on_authentication_failure":false,
-                "use_user_options":true
-            },
             "socks_proxy":{
                 "dns_over_socks":false,
                 "host":"",
@@ -161,7 +155,7 @@
     },
     "spider":{
         "crawler":{
-            "check_robots_text":false,
+            "check_robots_text":true,
             "detect_custom_not_found_responses":true,
             "ignore_links_to_non_text_content":true,
             "make_non_parameterized_request_to_dynamic_pages":true,

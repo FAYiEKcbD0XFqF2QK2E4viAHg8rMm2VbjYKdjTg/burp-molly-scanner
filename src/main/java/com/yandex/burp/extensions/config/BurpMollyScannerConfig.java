@@ -33,10 +33,6 @@ public class BurpMollyScannerConfig {
     @SerializedName("qs_parameters")
     private String qsParameters;
 
-    @SerializedName("auth")
-    @Expose
-    private MollyAuthConfig authConfig;
-
     @SerializedName("ignore_issues")
     @Expose
     private List<Integer> ignoredIssueIds;
@@ -104,14 +100,6 @@ public class BurpMollyScannerConfig {
 
     public void setQsParameters(String qsParameter) {
         this.qsParameters = qsParameter;
-    }
-
-    public MollyAuthConfig getAuthConfig() {
-        return authConfig;
-    }
-
-    public void setAuthConfig(MollyAuthConfig authConfig) {
-        this.authConfig = authConfig;
     }
 
     public List<String> getCrossdomainJsWhitelist() {

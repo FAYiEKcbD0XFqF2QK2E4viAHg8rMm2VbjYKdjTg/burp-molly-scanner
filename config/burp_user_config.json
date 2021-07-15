@@ -1,11 +1,6 @@
 {
     "user_options":{
         "connections":{
-            "platform_authentication":{
-                "credentials":[],
-                "do_platform_authentication":true,
-                "prompt_on_authentication_failure":false
-            },
             "socks_proxy":{
                 "dns_over_socks":false,
                 "host":"",
@@ -42,18 +37,10 @@
             "extensions":[
                 {
                     "errors":"console",
-                    "extension_file":"/usr/lib/yandex/burp/burp-molly-scanner-1.0-SNAPSHOT-jar-with-dependencies.jar",
+                    "extension_file":"./target/burp-molly-scanner-1.0-SNAPSHOT-jar-with-dependencies.jar",
                     "extension_type":"java",
                     "loaded":true,
                     "name":"MollyBurp",
-                    "output":"console"
-                },
-                {
-                    "errors":"console",
-                    "extension_file":"/usr/lib/yandex/burp/burp-molly-pack-1.0-SNAPSHOT-jar-with-dependencies.jar",
-                    "extension_type":"java",
-                    "loaded":true,
-                    "name":"Burp Molly Pack",
                     "output":"console"
                 }
             ],

@@ -6,12 +6,8 @@ import com.google.gson.JsonSyntaxException;
 import com.jayway.awaitility.Awaitility;
 import com.jayway.awaitility.core.ConditionTimeoutException;
 import com.yandex.burp.extensions.EntryPointDeduplicator;
-import com.yandex.burp.extensions.MollyProxyListener;
 import com.yandex.burp.extensions.MollyRequestResponseHandler;
-import com.yandex.burp.extensions.auth.BasicAuthAdapter;
-import com.yandex.burp.extensions.auth.IMollyAuthAdapter;
 import com.yandex.burp.extensions.config.BurpMollyScannerConfig;
-import com.yandex.burp.extensions.config.MollyAuthConfig;
 import com.yandex.burp.extensions.config.MollyConfig;
 
 import java.io.File;
@@ -44,14 +40,9 @@ public class BurpExtender implements IBurpExtender,
     private PrintWriter stdout;
     private BurpMollyScannerConfig extConfig;
     private static final int timeStep = 15;
-    private IMollyAuthAdapter authenticator;
 
     public BurpMollyScannerConfig getExtConfig() {
         return extConfig;
-    }
-
-    public IMollyAuthAdapter getAuthenticator() {
-        return authenticator;
     }
 
     public void postponeEntryPoint(IHttpRequestResponse messageInfo) {
@@ -148,23 +139,6 @@ public class BurpExtender implements IBurpExtender,
             return;
         }
 
-        MollyAuthConfig authConfig = extConfig.getAuthConfig();
-        /* TODO: use reflections? */
-        switch (authConfig.getAuthProvider().toUpperCase()) {
-            case "BASIC":
-                authenticator = new BasicAuthAdapter(callbacks, authConfig);
-                if (authenticator.isAuthExpected()) {
-                    if (!authenticator.doAuth(null)) {
-                        stdout.println("Auth config error. Invalid username/password?");
-                        callbacks.exitSuite(false);
-                        return;
-                    }
-                }
-                break;
-            default:
-                break;
-        }
-
         try {
             extConfig.setInitialURL(new URL(extConfig.getEntryPoint()));
         } catch (MalformedURLException e) {
@@ -175,10 +149,7 @@ public class BurpExtender implements IBurpExtender,
 
         // register custom class as an HTTP listener
         this.callbacks.registerHttpListener(new MollyRequestResponseHandler(callbacks,
-                extConfig, authenticator, scanners, deduper, postponedEntryPoints));
-        // register custom class as an Proxy listener
-        this.callbacks.registerProxyListener(new MollyProxyListener(callbacks, extConfig,
-                authenticator, deduper));
+                extConfig, scanners, deduper, postponedEntryPoints));
 
         // register ourselves as a Scanner listener
         callbacks.registerScannerListener(this);
@@ -227,11 +198,16 @@ public class BurpExtender implements IBurpExtender,
         /* XXX: we can do better  */
         waitForScanners((maxTime-scanTime));
 
-        if (authenticator != null) {
-            authenticator.doLogout(null);
-        }
-
         if (issues != null) {
+            for (IScanIssue issue : issues) {
+                if (!issue.getSeverity().equals("Information")) {
+                    stdout.println("Found new issue:" + issue.getIssueName() + " for url:" + issue.getUrl() + " severity:" + issue.getSeverity());
+                    // stdout.println("\t" + issue.getIssueDetail());
+                    // stdout.println("\n\n------------\n");
+                }
+            }
+            
+            
             callbacks.generateScanReport("XML", issues.toArray(new IScanIssue[issues.size()]),
                     new File(extConfig.getReportPath()));
         }
