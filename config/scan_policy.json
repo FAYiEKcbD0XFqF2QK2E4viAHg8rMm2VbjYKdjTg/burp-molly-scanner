@@ -1,0 +1,110 @@
+{
+    "crawler": {
+        "crawl_optimization": {
+            "maximum_link_depth": 15,
+            "crawl_strategy": "more complete"
+        },
+        "login_functions": {
+            "attempt_to_self_register_a_user": false,
+            "trigger_login_failures": false
+        },
+        "error_handling": {
+            "pause_task_requests_timed_out_percentage": 0
+        }
+    },
+    "scanner": {
+        "audit_optimization": {
+            "scan_speed": "thorough",
+            "scan_accuracy": "minimise_false_positives"
+        },
+        "modifying_parameter_locations": {
+            "cookie_to_url": true,
+            "url_to_cookie": true
+        },
+        "ignored_insertion_points": {
+            "skip_server_side_injection_for_parameters": [
+                {
+                    "enabled": false,
+                    "expression": "aspsessionid.*",
+                    "item": "name",
+                    "match_type": "matches_regex",
+                    "parameter": "cookie"
+                },
+                {
+                    "enabled": true,
+                    "expression": "asp.net_sessionid",
+                    "item": "name",
+                    "match_type": "is",
+                    "parameter": "cookie"
+                },
+                {
+                    "enabled": true,
+                    "expression": "__eventtarget",
+                    "item": "name",
+                    "match_type": "is",
+                    "parameter": "body_parameter"
+                },
+                {
+                    "enabled": true,
+                    "expression": "__eventargument",
+                    "item": "name",
+                    "match_type": "is",
+                    "parameter": "body_parameter"
+                },
+                {
+                    "enabled": true,
+                    "expression": "__viewstate",
+                    "item": "name",
+                    "match_type": "is",
+                    "parameter": "body_parameter"
+                },
+                {
+                    "enabled": true,
+                    "expression": "__eventvalidation",
+                    "item": "name",
+                    "match_type": "is",
+                    "parameter": "body_parameter"
+                },
+                {
+                    "enabled": false,
+                    "expression": "jsessionid",
+                    "item": "name",
+                    "match_type": "is",
+                    "parameter": "any_parameter"
+                },
+                {
+                    "enabled": true,
+                    "expression": "cfid",
+                    "item": "name",
+                    "match_type": "is",
+                    "parameter": "cookie"
+                },
+                {
+                    "enabled": true,
+                    "expression": "cftoken",
+                    "item": "name",
+                    "match_type": "is",
+                    "parameter": "cookie"
+                },
+                {
+                    "enabled": true,
+                    "expression": "PHPSESSID",
+                    "item": "name",
+                    "match_type": "is",
+                    "parameter": "cookie"
+                },
+                {
+                    "enabled": false,
+                    "expression": "session_id",
+                    "item": "name",
+                    "match_type": "is",
+                    "parameter": "cookie"
+                }
+            ]
+        },
+        "javascript_analysis": {
+            "max_dynamic_time_per_item": 90,
+            "max_static_time_per_item": 90
+        }
+    }
+}
