@@ -1,4 +1,12 @@
-# Burp-molly-scanner
+# Burp-molly-scanner Fork (focused on command line operation)
+
+# Notes
+
+Run like so from command line.
+
+    ./config/run.sh --report_path ./tmp/report.xml --initial_url https://foo.com/ --scan_timeout 160 --license_path ./config/license.txt 
+
+Note that this generates an xml report in the desired location; future work is to load this report to a desired s3 bucket!
 
 # Overview
 The main goal of Burp-molly-scanner is to extend Burp and turn it into headless active scanner.
