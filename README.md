@@ -26,3 +26,6 @@ Contributions to Burp-molly-scanner are always welcome! You can help us in diffe
   * Open an issue with suggestions for improvements and errors you're facing;
   * Fork this repository and submit a pull request;
   * Improve the documentation.
+
+# References
+* Slides from Yandex: https://2017.zeronights.org/wp-content/uploads/materials/ZN17_Zaitov_Automation%20of%20Web%20Application%20Scanning%20with%20Burp%20Suite.pdf
