@@ -4,7 +4,7 @@
 
 Run like so from command line.
 
-    ./config/run.sh --report_path ./tmp/report.xml --initial_url https://foo.com/ --scan_timeout 160 --license_path ./config/license.txt 
+    ./config/run.sh --report_path ./tmp/report.xml --initial_url https://foo.com/ --scan_timeout 160 --license_path ./config/license.txt --base_path .
 
 Note that this generates an xml report in the desired location; future work is to load this report to a desired s3 bucket!
 
