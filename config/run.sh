@@ -1,5 +1,4 @@
-#!/bin/sh
-
+#!/bin/bash
 
 # Run like so
 # ./config/run.sh --report_path .//tmp --initial_url https://foo.com/ --scan_timeout 160 --license_path ./config/license.txt   --base_path .
@@ -27,7 +26,7 @@ USER_CONFIG=$base_path/config/burp_user_config.json
 PROJECT_CONFIG=$base_path/config/scan_policy.json
 
 # Generate out molly config
-python3 config/burp_molly_config_builder.py --report_path $report_path --initial_url $initial_url --scan_timeout $scan_timeout > $MOLLY_CONFIG
+python3 $base_path/config/burp_molly_config_builder.py --report_path $report_path --initial_url $initial_url --scan_timeout $scan_timeout > $MOLLY_CONFIG
 
 export MOLLY_CONFIG=$MOLLY_CONFIG
 export LICENSE=cat $LICENSE_PATH
