@@ -20,13 +20,13 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 # Get all of our config file paths
-MOLLY_CONFIG=$base_path/config/burp_molly_config.json
-BURP_JAR_PATH=$base_path/config/burpsuite_pro.jar
-USER_CONFIG=$base_path/config/burp_user_config.json
-PROJECT_CONFIG=$base_path/config/scan_policy.json
+MOLLY_CONFIG=$base_path/burp_molly_config.json
+BURP_JAR_PATH=$base_path/burpsuite_pro.jar
+USER_CONFIG=$base_path/burp_user_config.json
+PROJECT_CONFIG=$base_path/scan_policy.json
 
 # Generate out molly config
-python3 $base_path/config/burp_molly_config_builder.py --report_path $report_path --initial_url $initial_url --scan_timeout $scan_timeout > $MOLLY_CONFIG
+python3 $base_path/burp_molly_config_builder.py --report_path $report_path --initial_url $initial_url --scan_timeout $scan_timeout > $MOLLY_CONFIG
 
 export MOLLY_CONFIG=$MOLLY_CONFIG
 export LICENSE=cat $LICENSE_PATH
